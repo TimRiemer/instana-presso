@@ -5,19 +5,22 @@ TAG?=$(shell git rev-list HEAD --max-count=1 --abbrev-commit)
 export TAG
 
 install:
-	npm install
+	./mvnw clean compile
 
-serve: install
-	npm start
+serve:
+	./mvnw clean compile quarkus:dev
 
 clean:
-	rm -rf node_modules
+	./mvnw clean
 
-pack: 
-	docker build -t gcr.io/acquired-rarity-236416/coordinatorservice:$(TAG) .
+native:
+	./mvnw package -Pnative -Dnative-image.docker-build=true
+
+pack: native
+	docker build -t gcr.io/acquired-rarity-236416/waterservice:$(TAG) -f src/main/docker/Dockerfile.native .
 
 upload:
-	docker push gcr.io/acquired-rarity-236416/coordinatorservice:$(TAG)
+	docker push gcr.io/acquired-rarity-236416/waterservice:$(TAG)
 
 deploy:
 	envsubst < k8s/deployment.yml | kubectl apply -n espresso-machine -f -

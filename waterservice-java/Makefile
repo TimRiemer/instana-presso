@@ -5,19 +5,16 @@ TAG?=$(shell git rev-list HEAD --max-count=1 --abbrev-commit)
 export TAG
 
 install:
-	npm install
-
-serve: install
-	npm start
+	./mvnw package
 
 clean:
-	rm -rf node_modules
+	rm -rf target
 
 pack: 
-	docker build -t gcr.io/acquired-rarity-236416/coordinatorservice:$(TAG) .
+	docker build -t gcr.io/acquired-rarity-236416/waterservice:$(TAG) .
 
 upload:
-	docker push gcr.io/acquired-rarity-236416/coordinatorservice:$(TAG)
+	docker push gcr.io/acquired-rarity-236416/waterservice:$(TAG)
 
 deploy:
 	envsubst < k8s/deployment.yml | kubectl apply -n espresso-machine -f -

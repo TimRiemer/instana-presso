@@ -13,14 +13,11 @@ serve:
 clean:
 	./mvnw clean
 
-native:
-	./mvnw package -Pnative -Dnative-image.docker-build=true
-
-pack: native
-	docker build -t noctarius2k/waterservice:$(TAG) -f src/main/docker/Dockerfile.native .
+pack: 
+	docker build -t gcr.io/acquired-rarity-236416/waterservice:$(TAG) .
 
 upload:
-	docker push noctarius2k/waterservice:$(TAG)
+	docker push gcr.io/acquired-rarity-236416/waterservice:$(TAG)
 
 deploy:
 	envsubst < k8s/deployment.yml | kubectl apply -n espresso-machine -f -

@@ -1,19 +1,19 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: tamper
+  name: waterservice
   labels:
-    app: tamper
+    app: waterservice
 spec:
   replicas: 2
   template:
     metadata:
       labels:
-        app: tamper
+        app: waterservice
     spec:
       containers:
-      - name: tamper
-        image: gcr.io/acquired-rarity-236416/tamper:${TAG}
+      - name: waterservice
+        image: gcr.io/acquired-rarity-236416/waterservice:${TAG}
         command:
         ports:
           - containerPort: 8080
@@ -26,13 +26,14 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: tamper
+  name: waterservice
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
-    app: tamper
+    app: waterservice
   ports:
   - protocol: TCP
+    nodePort: 30012
     port: 80
     targetPort: 3000
     name: http
