@@ -17,7 +17,7 @@ native:
 	./mvnw package -Pnative -Dnative-image.docker-build=true
 
 pack: native
-	docker build -t gcr.io/acquired-rarity-236416/waterservice:$(TAG) -f src/main/docker/Dockerfile.native .
+	docker build -t timriemer/instananative -f src/main/docker/Dockerfile.native .
 
 upload:
 	docker push gcr.io/acquired-rarity-236416/waterservice:$(TAG)
